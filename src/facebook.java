@@ -33,18 +33,19 @@ public class facebook {
 		driver.findElement(By.id("pass")).sendKeys(prop.getProperty("password"));
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
 		//clicking on pages sidebar 
-		driver.findElement(By.xpath("//div[@id='appsNav']/ul/li[2]/a")).click();
-		Thread.sleep(5000);
-		//driver.findElement(By.xpath("//a[contains(text(),'liked')]")).click();
-//		boolean likes=driver.getPageSource().contains("Liked Pages");
-//		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);				
-		driver.findElement(By.xpath("//div[contains(@class,'_5vx7')]/div/ul/li[3]")).click();
-		//Thread.sleep(5000);
-		//WebElement seemore=driver.findElement(By.xpath("//*[@class='fwb']"));
-		WebDriverWait wait =new WebDriverWait(driver, 20);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='fwb']")));
-		//wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[@class='fwb']"))));
-		driver.findElement(By.xpath("//*[@class='fwb']")).click();
+		WebElement sidebar=driver.findElement(By.id("appsNav"));
+		sidebar.findElement(By.linkText("Pages")).click();
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		driver.findElement(By.linkText("Liked Pages")).click();
+		try {
+			WebDriverWait wait =new WebDriverWait(driver, 20);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("See More")));
+			driver.findElement(By.linkText("See More")).click();	
+		}
+		catch(Exception e)
+		{
+			System.out.println("No seemore button is displayed");
+		}
 		facebook fb = new facebook();
 		int c1=fb.seemorepages(driver);
 		System.out.println("c1 value is "+c1);
@@ -53,7 +54,6 @@ public class facebook {
 		int c2=fb.remainingElements(driver);
 		System.out.println("c2 value is "+c2);
 		fb.finalcount(c1, c2);
-		//Thread.sleep(5000);	
 		driver.close();
 		//
 	}
